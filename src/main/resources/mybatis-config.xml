@@ -11,9 +11,9 @@
             <!--配置是否需要连接池-->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="password" value="syzxss247179876"/>
+                <property name="password" value="password"/>
                 <property name="username" value="root"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/javakeshe?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/db_name?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8"/>
             </dataSource>
         </environment>
     </environments>
