@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syz.service.mapperProblems">
+    <insert id="add_problem" parameterType="com.syz.model.Problem">
+<!--查询id值，封装数据使用的属性,这里封装到problem的pid上去,order为数据添加后查询-->
+             <selectKey keyProperty="pid" order="AFTER" resultType="java.lang.Integer">
+                 select last_insert_id()
+             </selectKey>
+        insert into problems(content,cid) values(#{content},#{cid})
+    </insert>
+    <delete id="delete_problem" parameterType="com.syz.model.Problem">
+        delete from problems where pid = #{pid}
+    </delete>
+    <update id="statistic_result" parameterType="com.syz.model.Problem">
+        update problems set praise = #{praise},oppose = #{oppose},abandon = #{abandon} where pid= #{pid}
+    </update>
+
+    <select id="show_problems" resultType="com.syz.model.Problem">
+        select problems.pid,content,thesis,starttime,endtime,conference.cid from problems,conference
+        where problems.cid = conference.cid  and conference.rid = #{arg2} limit #{arg0},#{arg1}
+    </select>
+
+    <select id="total_problems" resultType="java.util.HashMap">
+        select count(*) as total_number_problem from problems,conference
+        where problems.cid = conference.cid  and conference.district = #{arg0}
+    </select>
+</mapper>

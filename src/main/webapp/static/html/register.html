@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bootstrap Material Admin</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="https://www.jq22.com/jquery/bootstrap-4.2.1.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <link rel="stylesheet" href="/static/css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="/static/lib/layui/css/layui.css">
+  </head>
+  <body>
+    <div class="page login-page">
+      <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+          <div class="row">
+            <!-- Logo & Information Panel-->
+            <div class="col-lg-6">
+              <div class="info d-flex align-items-center">
+                <div class="content">
+                  <div class="logo">
+                    <h1>欢迎注册</h1>
+                  </div>
+                  <p>云社区管理系统</p>
+                </div>
+              </div>
+            </div>
+            <!-- Form Panel    -->
+            <div class="col-lg-6 bg-white">
+              <div class="form d-flex align-items-center">
+                <div class="content">
+                  <div class="layui-upload uploads" style="text-align: center">
+                    <label>身份证正面</label>
+                    <div class="layui-upload-list">
+                      <img class="upload_idcard" id="face">
+                    </div>
+                  </div>
+
+                    <div class="form-group">
+                      <button id="verified" type="button" name="registerSubmit" class="btn btn-primary">注册</button>
+                    </div>
+                  <small>已有账号?</small><a href="login.html" class="signup">&nbsp;登录</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="https://www.jq22.com/jquery/bootstrap-4.2.1.js"></script>
+    <script type="text/javascript" src="/static/lib/layui/layui.all.js"></script>
+    <script>
+    		layui.use('upload',function () {
+    		  let $ = layui.jquery;
+    		  let upload = layui.upload;
+    		  let layer = layui.layer;
+              $(function(){
+              //身份证件正面上传
+                $("#face").hover(function () {
+                  layer.tips('<h3>身份证识别要求：</h3><br>' +
+                          '1.上传证件应清晰，确保窗口内肉眼可以看见文字。<br>' +
+                          '2.上传证件大小在2M以内。<br>' +
+                          '3.上传证件图片类型为JGP,PNG,JEPG等常见格式。<br>' +
+                          '<b style="color: red">4.默认用户名将设定为您的姓名。</b></br>' +
+                          '<b style="color: red">5.默认登录密码将设定为您的身份证后六位。</b>', '#face', {
+                    tips: 2,
+                    time:10000,
+                  });
+                })
+    		     upload.render({
+                        elem: '#face'
+                        , accept:'images'
+                        , auto:false
+                        , size:2000
+                        , data:{'card_type':'face'}
+                        , drag:true
+                        , exts:'jpg|png|jpeg'
+                        , bindAction:'#verified'
+                        , field:'image'
+                        , url: '/recipient/register' //改成您自己的上传接口
+                        , choose: function (obj) {
+                          //预读本地文件示例，不支持ie8
+                          obj.preview(function (index, file, result) {
+                            $('#face').prop('src', result); //图片链接（base64)
+                          });
+                        }
+                        , done: function (res) {
+                          //如果上传失败
+                          if (res.code === 21) {
+                            layer.msg('认证成功!', {icon: 1, time: 1000, closeBtn: 0});
+                            window.location.href = 'login.html';
+                          }
+                          else if (res.code === -21){
+                            layer.msg('图像识别失败!', {icon: 2, time: 1200, closeBtn: 0});
+                          }
+                          else if(res.code === 500){
+                            layer.msg('服务器无响应!', {icon: 2, time: 1200, closeBtn: 0});
+                          }
+                          $('#face').removeAttr('src');
+                          //上传成功
+                        }
+                        , error: function () {
+                          //演示失败状态，并实现重传
+                          layer.msg('服务器无响应!', {icon: 2, time: 1200, closeBtn: 0});
+                          $('#face').removeAttr('src');
+                        }
+                      });
+            })
+    	})
+    </script>
+  </body>
+</html>

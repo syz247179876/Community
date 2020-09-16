@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syz.service.mapperService">
+    <insert id="add_service" parameterType="com.syz.model.Service_">
+        insert into service(project_name,project_content,status,public_time,rid) values(#{project_name},#{project_content},false,#{public_time},#{rid})
+    </insert>
+
+    <delete id="delete_service" parameterType="com.syz.model.Service_">
+        delete from service where sid = #{sid}
+    </delete>
+
+    <update id="edit_service" parameterType="com.syz.model.Service_">
+        update service set project_name = #{project_name},project_content = #{project_content}
+    </update>
+
+    <select id="show_service" resultType="com.syz.model.Service_">
+        select sid,project_content,project_name,status,public_time,username,identity from service,resident
+        where service.rid=resident.rid and status = false limit #{arg0},#{arg1}
+    </select>
+    
+    <select id="total_service" resultType="java.util.HashMap">
+        select count(*) as total_record_services from service;
+    </select>
+
+    <!-- update the status of implement-->
+    <update id="lend_service" parameterType="com.syz.model.Service_">
+        update service set status = true,recipient_phone = #{recipient_phone},recipient_username=#{recipient_username} where sid=#{sid}
+    </update>
+
+    <!--select the number of service project which were accepted by somebody -->
+    <select id="total_accepted_service" resultType="java.util.HashMap">
+        select count(*) as total_record_accepted_services from service,resident
+        where service.rid = resident.rid and resident.rid = #{arg0} ;
+    </select>
+
+    <!--select the whole service project which were accepted by somebody -->
+    <select id="show_accepted_service" resultType="com.syz.model.Service_">
+        select  sid,project_content,project_name,public_time,recipient_username,identity,recipient_phone from service,resident
+        where service.rid=resident.rid and status = true limit #{arg0},#{arg1}
+    </select>
+
+</mapper>

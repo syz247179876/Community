@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.syz.service.mapperUser">
+    <!--id为接口中的方法-->
+    <!--OGNL表达式-->
+    <!--generate new resident-->
+    <insert id="add_resident" parameterType="com.syz.model.Resident">
+        insert into resident(username,sex,birthday,id_card,residence,password,district,identity,phone) values (#{username},#{sex},#{birthday},#{id_card},#{residence},#{password},#{district},#{identity},#{phone})
+    </insert>
+
+    <select id="check_register" parameterType="com.syz.model.Resident" resultType="java.util.Map">
+        select COUNT(*) as register_number from resident where id_card = #{id_card};
+    </select>
+    
+    <select id="check_login" parameterType="com.syz.model.Resident" resultType="com.syz.model.Resident">
+        select * from resident where id_card = #{id_card} and password = #{password}
+    </select>
+
+    <insert id="add_notice" parameterType="com.syz.model.Notification">
+        insert into notification(title,content,starttime,notice_type,author,identity) values(#{title},#{content},#{starttime},#{notice_type},#{author},#{identity})
+    </insert>
+
+    <select id="show_notice" resultType="com.syz.model.Notification">
+        select * from notification limit #{arg0},#{arg1}
+    </select>
+
+    <delete id="delete_notice" parameterType="com.syz.model.Notification">
+        delete from notification where nid = (#{nid})
+    </delete>
+
+    <update id="edit_notice" parameterType="com.syz.model.Notification">
+        update notification set title = #{title},content = #{content},starttime = #{starttime},notice_type = #{notice_type}
+    </update>
+
+    <select id="total_notice" resultType="java.util.HashMap">
+        select count(*) as total_number from notification
+    </select>
+
+    <insert id="add_conference" parameterType="com.syz.model.Conference">
+        insert into conference(starttime,endtime,thesis,location,rid,district) values(#{starttime},#{endtime},#{thesis},#{location},#{rid},#{district})
+    </insert>
+
+    <delete id="delete_conference" parameterType="com.syz.model.Conference">
+        delete from conference where cid = #{cid}
+    </delete>
+
+    <select id="show_conference" resultType="com.syz.model.Conference">
+        select cid,username,identity,starttime,endtime,thesis,location,conference.district from resident,conference where
+        resident.rid = conference.rid and conference.rid = #{arg2} limit #{arg0},#{arg1}
+    </select>
+
+    <!--select aim conference which possess the same district as district that in the whole conference obj-->
+    <select id="show_conference_each_resident" resultType="com.syz.model.Conference">
+        select  cid,starttime,endtime,thesis,username,location,identity,conference.district from conference,resident where
+        resident.rid = conference.rid and conference.district = (select district from resident where rid = #{arg2}) limit #{arg0},#{arg1}
+    </select>
+
+    <select id="total_conference" parameterType="com.syz.model.Resident" resultType="java.util.HashMap">
+        select count(*) as total_number_conference from conference where rid = #{rid}
+    </select>
+
+
+</mapper>

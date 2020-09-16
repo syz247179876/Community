@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置环境变量-->
+    <environments default="mysql">
+        <!--配置具体的环境-->
+        <environment id="mysql">
+            <!--配置事务的类型，使用本地事务的策略-->
+            <transactionManager type="JDBC"/>
+            <!--配置是否需要连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="password" value="syzxss247179876"/>
+                <property name="username" value="root"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/javakeshe?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=GMT%2B8"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--引入映射文件-->
+    <mappers>
+        <mapper resource="mappers/sqlMapper.xml"/>
+        <mapper resource="mappers/problemMapper.xml"/>
+        <mapper resource="mappers/serviceMapper.xml"/>
+    </mappers>
+</configuration>
