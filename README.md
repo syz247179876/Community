@@ -1,6 +1,6 @@
 # Community
 
-基于SpringMVC+Layui的社区管理系统，本系统是我大三学习Java Web时做的课设。
+基于SpringMVC+Layui的社区管理系统，本系统是我大三学习Java Web时做的项目。
 
 社区是具有某种互动关系的和共同文化维系力的，在一定领域内相互关联的人群形成的共同体及其活动区域。
 
